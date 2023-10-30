@@ -3,6 +3,8 @@ let rows = 30
 let columns = 30
 let foodX, foodY
 let snakeX = 10, snakeY = 10
+let intervalId
+let direction = "right"
 
 function createFoodAndSnakeGrid() {
     let createSnakeAndFood = `<div class="snake" style='grid-area:${snakeY} / ${snakeX}'></div>`
@@ -22,19 +24,18 @@ function checkSnakeAndFoodGrid() {
 }
 
 function maxXandMaxY() {
-    let maxGridX = 31, maxGridY = 31
-    let minGridX = 0, minGridY = 0
-    if (snakeX === maxGridX) {
-        snakeX = 1
+    let minGridValue = 1
+    if (snakeX > columns) {
+        snakeX = minGridValue
     }
-    if (snakeY === maxGridY) {
-        snakeY = 1
+    if (snakeY > rows) {
+        snakeY = minGridValue
     }
-    if (snakeY === minGridY) {
-        snakeY = 30
+    if (snakeY < minGridValue) {
+        snakeY = rows
     }
-    if (snakeX === minGridX) {
-        snakeX = 30
+    if (snakeX < minGridValue) {
+        snakeX = columns
     }
 }
 
@@ -46,29 +47,40 @@ function snakeMove() {
     createFoodAndSnakeGrid()
 }
 
+function autoMoveSnake() {
+    switch (direction) {
+        case "right":
+            snakeX++
+            break
+        case "left":
+            snakeX--
+            break
+        case "up":
+            snakeY--
+            break
+        case "down":
+            snakeY++
+            break
+    }
+    snakeMove()
+}
+
 const changeSnakeDirection = (e) => {
-    if (e.key === 'ArrowDown') {
-        snakeY++
-        snakeMove()
-    }
-    else if (e.key === 'ArrowUp') {
-        snakeY--
-        snakeMove()
-    }
-    else if (e.key === 'ArrowLeft') {
-        snakeX--
-        snakeMove()
-    }
-    else if (e.key === 'ArrowRight') {
-        snakeX++
-        snakeMove()
+    if (e.key === 'ArrowDown' && direction !== "up") {
+        direction = "down"
+    } else if (e.key === 'ArrowUp' && direction !== "down") {
+        direction = "up"
+    } else if (e.key === 'ArrowLeft' && direction !== "right") {
+        direction = "left"
+    } else if (e.key === 'ArrowRight' && direction !== "left") {
+        direction = "right"
     }
 }
 
 function startGame() {
     randomizeFoodXandY()
     createFoodAndSnakeGrid()
-
+    intervalId = setInterval(autoMoveSnake, 100)
 }
 
 startGame()
