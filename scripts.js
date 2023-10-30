@@ -5,13 +5,16 @@ let foodX, foodY
 let snakeX = 10, snakeY = 10
 let intervalId
 let direction = "right"
+let snakeBody = [{ x: snakeX, y: snakeY }]
 
 function createFoodAndSnakeGrid() {
-    let createSnakeAndFood = `<div class="snake" style='grid-area:${snakeY} / ${snakeX}'></div>`
+    let createSnakeAndFood = ''
+    for (const segment of snakeBody) {
+        createSnakeAndFood += `<div class="snake" style='grid-area:${segment.y} / ${segment.x}'></div>`
+    }
     createSnakeAndFood += `<div class="food" style='grid-area:${foodY} / ${foodX}'></div>`
     board.innerHTML = createSnakeAndFood
 }
-
 function randomizeFoodXandY() {
     foodX = Math.floor(Math.random() * rows + 1)
     foodY = Math.floor(Math.random() * columns + 1)
@@ -20,31 +23,38 @@ function randomizeFoodXandY() {
 function checkSnakeAndFoodGrid() {
     if (snakeX === foodX && snakeY === foodY) {
         randomizeFoodXandY()
+        pushNextSegmentPosition()
     }
 }
 
-function maxXandMaxY() {
-    let minGridValue = 1
-    if (snakeX > columns) {
-        snakeX = minGridValue
-    }
-    if (snakeY > rows) {
-        snakeY = minGridValue
-    }
-    if (snakeY < minGridValue) {
-        snakeY = rows
-    }
-    if (snakeX < minGridValue) {
-        snakeX = columns
+function pushNextSegmentPosition() {
+    snakeBody.push({ x: snakeX, y: snakeY })
+}
+
+function checkSnakeCollision() {
+    let minGridValue = 0
+    let maxGridValue = 31
+    if (snakeX > maxGridValue || snakeX < minGridValue || snakeY > maxGridValue || snakeY < minGridValue) {
+        window.location.reload()
     }
 }
+
 
 function snakeMove() {
-    let deleteSnake = document.querySelector('.snake')
-    deleteSnake.remove();
+    let deleteSnake = document.querySelectorAll('.snake');
+    for (const segment of deleteSnake) {
+        segment.remove();
+    }
     checkSnakeAndFoodGrid()
-    maxXandMaxY()
+    checkSnakeCollision()
     createFoodAndSnakeGrid()
+}
+
+function addSnakeGrid() {
+    for (let i = snakeBody.length - 1; i > 0; i--) {
+        snakeBody[i] = { ...snakeBody[i - 1] };
+    }
+    snakeBody[0] = { x: snakeX, y: snakeY };
 }
 
 function autoMoveSnake() {
@@ -62,6 +72,7 @@ function autoMoveSnake() {
             snakeY++
             break
     }
+    addSnakeGrid()
     snakeMove()
 }
 
