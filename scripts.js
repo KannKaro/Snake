@@ -20,6 +20,14 @@ function randomizeFoodXandY() {
     foodY = Math.floor(Math.random() * columns + 1)
 }
 
+function checkSnakeBodyCollision() {
+    for (let i = 1; i < snakeBody.length; i++) {
+        if (snakeX === snakeBody[i].x && snakeY === snakeBody[i].y) {
+            window.location.reload()
+        }
+    }
+}
+
 function checkSnakeAndFoodGrid() {
     if (snakeX === foodX && snakeY === foodY) {
         randomizeFoodXandY()
@@ -28,7 +36,7 @@ function checkSnakeAndFoodGrid() {
 }
 
 function pushNextSegmentPosition() {
-    snakeBody.push({ x: snakeX, y: snakeY })
+    snakeBody.push({ x: snakeX - 1, y: snakeY - 1 })
 }
 
 function checkSnakeCollision() {
@@ -39,14 +47,14 @@ function checkSnakeCollision() {
     }
 }
 
-
 function snakeMove() {
-    let deleteSnake = document.querySelectorAll('.snake');
+    let deleteSnake = document.querySelectorAll('.snake')
     for (const segment of deleteSnake) {
-        segment.remove();
+        segment.remove()
     }
-    checkSnakeAndFoodGrid()
     checkSnakeCollision()
+    checkSnakeAndFoodGrid()
+    checkSnakeBodyCollision()
     createFoodAndSnakeGrid()
 }
 
