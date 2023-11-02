@@ -15,9 +15,22 @@ function createFoodAndSnakeGrid() {
     createSnakeAndFood += `<div class="food" style='grid-area:${foodY} / ${foodX}'></div>`
     board.innerHTML = createSnakeAndFood
 }
+
 function randomizeFoodXandY() {
-    foodX = Math.floor(Math.random() * rows + 1)
-    foodY = Math.floor(Math.random() * columns + 1)
+    let isFoodOnSnake = true
+
+    while (isFoodOnSnake) {
+        foodX = Math.floor(Math.random() * rows + 1)
+        foodY = Math.floor(Math.random() * columns + 1)
+
+        isFoodOnSnake = false
+        for (const segment of snakeBody) {
+            if (foodX === segment.x && foodY === segment.y) {
+                isFoodOnSnake = true
+                break
+            }
+        }
+    }
 }
 
 function checkSnakeBodyCollision() {
