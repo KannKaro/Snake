@@ -112,7 +112,7 @@ const changeSnakeDirection = (e) => {
 function startGame() {
     randomizeFoodXandY()
     createFoodAndSnakeGrid()
-    intervalId = setInterval(autoMoveSnake, 100)
+    intervalId = setInterval(autoMoveSnake, 50)
 }
 
 startGame()
