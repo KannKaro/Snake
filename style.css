@@ -45,3 +45,7 @@ body {
 .reset:hover {
     box-shadow: 0 4px 2px -3px #ccc, 0 4px 5px 1px #ccc, 0 2px 7px 1px #ccc;
 }
+
+.points {
+    font-size: 30px;
+}

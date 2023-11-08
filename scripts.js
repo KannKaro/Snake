@@ -6,6 +6,7 @@ let snakeX = 10, snakeY = 10
 let intervalId
 let direction = "right"
 let snakeBody = [{ x: snakeX, y: snakeY }]
+let startPoints = 0
 
 function createFoodAndSnakeGrid() {
     let createSnakeAndFood = ''
@@ -41,10 +42,18 @@ function checkSnakeBodyCollision() {
     }
 }
 
+function addPoints() {
+    let points = document.querySelector('#points')
+
+    ++startPoints
+    points.innerHTML = startPoints
+}
+
 function checkSnakeAndFoodGrid() {
     if (snakeX === foodX && snakeY === foodY) {
         randomizeFoodXandY()
         pushNextSegmentPosition()
+        addPoints()
     }
 }
 
